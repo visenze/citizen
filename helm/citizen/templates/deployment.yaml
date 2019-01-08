@@ -35,6 +35,21 @@ spec:
             httpGet:
               path: /health
               port: http
+          env:
+          - name: CITIZEN_STORAGE
+            value: {{ .Values.storageType }}
+          {{- if eq .Values.storageType "s3" }}
+          - name: CITIZEN_AWS_S3_BUCKET
+            value: {{ .Values.aws.bucket }}
+          - name: AWS_ACCESS_KEY_ID
+            valueFrom:
+              secretKeyRef:
+{{ toYaml .Values.aws.accessKeyID | indent 16 }}
+          - name: AWS_SECRET_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+{{ toYaml .Values.aws.secretAccessKey | indent 16 }}
+          {{- end }}
           resources:
 {{ toYaml .Values.resources | indent 12 }}
     {{- with .Values.nodeSelector }}

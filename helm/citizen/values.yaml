@@ -30,3 +30,26 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+# Your storage type. Choose either s3 or file
+storageType: "s3"
+
+aws:
+  # The bucket name that you want to use, only required if the storage type is s3
+  bucket: ""
+  # The kubernetes secret names and keys to your credentials, only required if the storage type is s3
+  # For example,
+  # accessKeyID: {"name": "aws-credentials", "key": "AWS_ACCESS_KEY_ID"}
+  # secretAccessKey: {"name": "aws-credentials", "key": "AWS_SECRET_ACCESS_KEY"}
+  # if your secret is of the form
+  #####
+  # apiVersion: v1
+  # kind: Secret
+  # metadata:
+  #   name: mysecret
+  # type: Opaque
+  # data:
+  #   username: AKIA...
+  #   password: *******
+  accessKeyID: {}
+  secretAccessKey: {}
