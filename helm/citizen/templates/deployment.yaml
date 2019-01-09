@@ -1,0 +1,66 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ template "citizen.fullname" . }}
+  labels:
+    app: {{ template "citizen.name" . }}
+    chart: {{ template "citizen.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "citizen.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "citizen.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 3000
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+          env:
+          - name: CITIZEN_STORAGE
+            value: {{ .Values.storageType }}
+          {{- if eq .Values.storageType "s3" }}
+          - name: CITIZEN_AWS_S3_BUCKET
+            value: {{ .Values.aws.bucket }}
+          - name: AWS_ACCESS_KEY_ID
+            valueFrom:
+              secretKeyRef:
+{{ toYaml .Values.aws.accessKeyID | indent 16 }}
+          - name: AWS_SECRET_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+{{ toYaml .Values.aws.secretAccessKey | indent 16 }}
+          {{- end }}
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
