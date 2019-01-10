@@ -25,6 +25,10 @@ ENV CITIZEN_STORAGE_PATH /path/to/store
 #ENV AWS_SECRET_ACCESS_KEY YOUR_AWS_SECRET_KEY_IF_STORAGE_IS_S3
 ENV NODE_ENV=production
 
+RUN mkdir -p /snapshot/www/lib
+
+COPY ./views /snapshot/www/views
+
 EXPOSE 3000
 
 CMD citizen server
