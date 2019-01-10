@@ -1,0 +1,9 @@
+storageType: "s3"
+aws:
+  bucket: ${s3_bucket}
+  accessKeyID:
+    name: ${secret_name}
+    key: AWS_ACCESS_KEY_ID
+  secretAccessKey:
+    name: ${secret_name}
+    key: AWS_SECRET_ACCESS_KEY
