@@ -11,6 +11,8 @@ In order for this terraform module to work, it needs the following
   - Create IAM Policy
   - Attach IAM Policy to User
   - Create S3 bucket
+- Kubectl access to a cluster, with permission to create secrets
+- Helm access to a cluster, with standard permissions for deployments and services
 
 ## Variables
 
