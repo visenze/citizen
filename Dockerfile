@@ -6,7 +6,7 @@ LABEL maintainer="outsideris@gmail.com"
 WORKDIR /www
 ADD . /www
 
-RUN npm install
+RUN npm install --production
 
 RUN npm run build
 
